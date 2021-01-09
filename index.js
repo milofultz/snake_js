@@ -19,6 +19,7 @@ $(document).ready(function () {
   const $gameCanvas = $('<canvas class="game-canvas" id="game-canvas"></canvas>');
   const $startButton = $('<span class="button button-start" id="start-button">Start</span>');
   const $changeKeysButton = $('<span class="button button-change" id="change-keys-button">Change Keys</span>');
+  const $speedButton = $('<span class="button button-speed speed-normal" id="speed-button">Normal</span>');
 
   // create event helper functions
   const keysCtrl = (function () {
@@ -49,9 +50,9 @@ $(document).ready(function () {
       },
       {
         up: { code: 'KeyI', label: 'I' },
-        down: { code: 'KeyJ', label: 'J' },
-        left: { code: 'KeyK', label: 'K' },
-        right: { code: 'KeyM', label: 'M' },
+        down: { code: 'KeyM', label: 'M' },
+        left: { code: 'KeyJ', label: 'J' },
+        right: { code: 'KeyK', label: 'K' },
       }
     ]
     let currentKeysetIndex = 0;
@@ -149,9 +150,27 @@ $(document).ready(function () {
       return false;
     };
 
+    let speedSettings = [
+      { speed: 500, label: "Slow" },
+      { speed: 250, label: "Normal" },
+      { speed: 100, label: "Fast" },
+      { speed: 50, label: "Very Fast" }
+    ];
+    let currentSpeedIndex = 1;
+    let currentSpeed = speedSettings[1].speed;
+
     let gameInPlay = false;
 
     return {
+      changeSpeed: function () {
+        currentSpeedIndex = (currentSpeedIndex + 1) % speedSettings.length;
+        currentSpeed = speedSettings[currentSpeedIndex].speed;
+        lastLabel = speedSettings[(speedSettings.length + currentSpeedIndex - 1) % speedSettings.length].label;
+        currentLabel = speedSettings[currentSpeedIndex].label;
+        $speedButton.text(currentLabel);
+        $speedButton.removeClass('speed-' + lastLabel.toLowerCase().replace(' ', '-'))
+                    .addClass('speed-' + currentLabel.toLowerCase().replace(' ', '-'));
+      },
       play: function () {
         if (gameInPlay) {
           console.log("game in play");
@@ -176,12 +195,16 @@ $(document).ready(function () {
         let keyset = keysCtrl.getKeyset();
         $(document).keydown(function (event) {
           if (event.originalEvent.code === keyset.up.code && snakeDirection !== directionCoords.down) {
+            event.preventDefault();
             nextDirection = directionCoords.up;
           } else if (event.originalEvent.code === keyset.left.code && snakeDirection !== directionCoords.right) {
+            event.preventDefault();
             nextDirection = directionCoords.left;
           } else if (event.originalEvent.code === keyset.down.code && snakeDirection !== directionCoords.up) {
+            event.preventDefault();
             nextDirection = directionCoords.down;
           } else if (event.originalEvent.code === keyset.right.code && snakeDirection !== directionCoords.left) {
+            event.preventDefault();
             nextDirection = directionCoords.right;
           }
         });
@@ -209,7 +232,7 @@ $(document).ready(function () {
           clearCanvas(ctx);
           drawSnake(snake, ctx);
           drawApple(apple, ctx);
-        }, 100);
+        }, currentSpeed);
       }
     }
   })();
@@ -224,6 +247,7 @@ $(document).ready(function () {
     keysCtrl.changeKeyset();
     keysCtrl.fillKeys();
   });
+  $speedButton.on('click', gameCtrl.changeSpeed);
 
   // append elements to DOM
   $nav.appendTo($body);
@@ -242,4 +266,5 @@ $(document).ready(function () {
   $gameCanvas.appendTo($gameWrapper);
   $startButton.appendTo($gameWrapper);
   $changeKeysButton.appendTo($gameWrapper);
+  $speedButton.appendTo($gameWrapper);
 });

@@ -118,6 +118,22 @@ body {
 
 }
 
+.speed-slow {
+  background-color: rgb(78, 78, 255);
+}
+
+.speed-normal {
+  background-color: rgb(96, 255, 96);
+}
+
+.speed-fast {
+  background-color: rgb(255, 255, 95);
+}
+
+.speed-very-fast {
+  background-color: rgb(255, 100, 100);
+}
+
 /* || Animation Keyframes */
 
 /* || Media Queries */
