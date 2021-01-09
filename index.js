@@ -33,7 +33,7 @@ $(document).ready(function () {
     let apple = getNewAppleCoord();
     let nextDirection = directionCoords.up;
 
-    $(document).keyup(function (event) {
+    $(document).keydown(function (event) {
       if (event.originalEvent.code === "KeyW" && snakeDirection !== directionCoords.down) {
         nextDirection = directionCoords.up;
       } else if (event.originalEvent.code === "KeyA" && snakeDirection !== directionCoords.right) {
