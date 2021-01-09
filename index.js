@@ -12,14 +12,16 @@ $(document).ready(function () {
   const $titleTextMain = $('<span class="title-text title-text-main" id="main-title">SNAKEHACK!</span>');
   const $titleTextSecondary = $('<span class="title-text title-text-secondary" id="secondary-title">where you have to move like a snake</span>');
 
-  const $gameWrapper = $('<div class="game-wrapper" id="game-wrapper"></div>');
+  const $gameWrapper = $('<div class="game-wrapper text-center" id="game-wrapper"></div>');
   const $scoreboard = $('<span class="scoreboard" id="scoreboard"></span>');
   const $gameCanvas = $('<canvas class="game-canvas" id="game-canvas"></canvas>');
   const $startButton = $('<span class="button button-start" id="start-button">Start</span>');
 
   // create event helper functions
+  const ctx = $gameCanvas[0].getContext('2d');
+
   const playGame = function () {
-    const ctx = initializeCanvas();
+    clearCanvas(ctx);
     sizeCanvas(ctx);
 
     const directionCoords = {
@@ -67,12 +69,6 @@ $(document).ready(function () {
       drawSnake(snake, ctx);
       drawApple(apple, ctx);
     }, 100);
-  };
-
-  const initializeCanvas = function () {
-    // create canvas context
-    const ctx = $gameCanvas[0].getContext('2d');
-    return ctx;
   };
 
   const sizeCanvas = function (canvas) {
@@ -127,9 +123,8 @@ $(document).ready(function () {
     return false;
   };
 
-  playGame();
-
   // create event listeners
+  $startButton.on('click', playGame);
 
   // append elements to DOM
   $nav.appendTo($body);
