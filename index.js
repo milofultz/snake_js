@@ -18,6 +18,39 @@ $(document).ready(function () {
   const $startButton = $('<span class="button button-start" id="start-button">Start</span>');
 
   // create event helper functions
+  const playGame = function () {
+    initializeCanvas();
+
+    // create the snake array (array of coordinates)
+    // create the apple object (single coordinate)
+    // create the direction var (last button pressed by user)
+
+    // create event listeners for keyup to change direction var
+
+    // draw snake
+    // draw apple
+
+    // every second
+      // add one element to head of snake at coordinate + (direction offset)
+      // if current snake head is out of bounds
+        // end game
+      // else if current snake head is not apple coordinate
+        // pop one element from end
+      // draw snake
+      // draw apple
+  };
+
+  const initializeCanvas = function () {
+    // create canvas context
+    const ctx = $gameCanvas[0].getContext('2d');
+    ctx.canvas.width  = 200;
+    ctx.canvas.height = 200;
+  };
+
+  const drawSnake = function (snakeCoordinates) {
+    //
+  };
+
 
   // create event listeners
 
