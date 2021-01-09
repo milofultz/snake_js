@@ -22,7 +22,9 @@ $(document).ready(function () {
     initializeCanvas();
 
     // create the snake array (array of coordinates)
+    let snake = [getRandomCoord()];
     // create the apple object (single coordinate)
+    let apple = getRandomCoord();
     // create the direction var (last button pressed by user)
 
     // create event listeners for keyup to change direction var
@@ -47,10 +49,19 @@ $(document).ready(function () {
     ctx.canvas.height = 200;
   };
 
+  const coord = function (x, y) {
+    return {x: x, y: y};
+  }
+
+  const getRandomCoord = function () {
+    return coord(Math.floor(Math.random() * 20), Math.floor(Math.random() * 20));
+  }
+
   const drawSnake = function (snakeCoordinates) {
     //
   };
 
+  playGame();
 
   // create event listeners
 
