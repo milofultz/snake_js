@@ -18,6 +18,7 @@ $(document).ready(function () {
   const $scoreboard = $('<span class="scoreboard" id="scoreboard"></span>');
   const $gameCanvas = $('<canvas class="game-canvas" id="game-canvas"></canvas>');
   const $startButton = $('<span class="button button-start" id="start-button">Start</span>');
+  // const $changeKeysButton = $('<span class="button button-change" id="change-keys-button">Change Keys</span>');
 
   // create event helper functions
   const fillKeys = function () {
@@ -54,7 +55,7 @@ $(document).ready(function () {
     $keysActualRow.appendTo($keysLegend);
   };
 
-  const game = function () {
+  const gameCtrl = (function () {
     const ctx = $gameCanvas[0].getContext('2d');
 
     const sizeCanvas = function (canvas) {
@@ -171,13 +172,13 @@ $(document).ready(function () {
         }, 100);
       }
     }
-  };
+  })();
 
-  const newGame = game();
   fillKeys();
 
   // create event listeners
-  $startButton.on('click', newGame.play);
+  $startButton.on('click', gameCtrl.play);
+  // $changeKeysButton.on('click', changeKeys);
 
   // append elements to DOM
   $nav.appendTo($body);
@@ -195,4 +196,5 @@ $(document).ready(function () {
   $scoreboard.appendTo($gameWrapper);
   $gameCanvas.appendTo($gameWrapper);
   $startButton.appendTo($gameWrapper);
+  $changeKeysButton.appendTo($gameWrapper);
 });
