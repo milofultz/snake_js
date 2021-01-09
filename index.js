@@ -11,6 +11,8 @@ $(document).ready(function () {
   const $title = $('<h1 class="title text-center" id="title"></h1>');
   const $titleTextMain = $('<span class="title-text title-text-main" id="main-title">SNAKEHACK!</span>');
   const $titleTextSecondary = $('<span class="title-text title-text-secondary" id="secondary-title">where you have to move like a snake</span>');
+  const $rules = $('<div class="rules text-center" id="rules"><strong class="main-text rules-header" id="rules-header">Rules:</strong></div>');
+  const $rulesLegend = $('<table class="rules-legend table" id="rules-legend"></table>');
 
   const $gameWrapper = $('<div class="game-wrapper text-center" id="game-wrapper"></div>');
   const $scoreboard = $('<span class="scoreboard" id="scoreboard"></span>');
@@ -151,6 +153,7 @@ $(document).ready(function () {
   $title.appendTo($header);
   $titleTextMain.appendTo($title);
   $titleTextSecondary.appendTo($title);
+  $rules.appendTo($header);
 
   $gameWrapper.appendTo($body);
   $scoreboard.appendTo($gameWrapper);
