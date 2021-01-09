@@ -29,20 +29,21 @@ $(document).ready(function () {
     };
 
     let snake = [coord(100,100)];
+    let snakeDirection = directionCoords.up;
     let apple = getNewAppleCoord();
-    let direction = directionCoords.up;
+    let nextDirection = directionCoords.up;
 
 
     // destroy this at end of game
     $(document).keyup(function (event) {
-      if (event.originalEvent.code === "KeyW") {
-        direction = directionCoords.up;
-      } else if (event.originalEvent.code === "KeyA") {
-        direction = directionCoords.left;
-      } else if (event.originalEvent.code === "KeyS") {
-        direction = directionCoords.down;
-      } else if (event.originalEvent.code === "KeyD") {
-        direction = directionCoords.right;
+      if (event.originalEvent.code === "KeyW" && snakeDirection !== directionCoords.down) {
+        nextDirection = directionCoords.up;
+      } else if (event.originalEvent.code === "KeyA" && snakeDirection !== directionCoords.right) {
+        nextDirection = directionCoords.left;
+      } else if (event.originalEvent.code === "KeyS" && snakeDirection !== directionCoords.up) {
+        nextDirection = directionCoords.down;
+      } else if (event.originalEvent.code === "KeyD" && snakeDirection !== directionCoords.left) {
+        nextDirection = directionCoords.right;
       }
     });
 
@@ -50,8 +51,11 @@ $(document).ready(function () {
     drawApple(apple, ctx);
 
     const gameLoop = setInterval(function () {
-      snake.unshift(coord(snake[0].x + direction.x, snake[0].y + direction.y));
-      if (snake[0].x < 0 || snake[0].x > 200 || snake[0].y < 0 || snake[0].y > 200) {
+      snakeDirection = nextDirection;
+      snake.unshift(coord(snake[0].x + nextDirection.x, snake[0].y + nextDirection.y));
+
+      if (snake[0].x < 0 || snake[0].x >= 200 || snake[0].y < 0 || snake[0].y >= 200 ||
+          isEatingSelf(snake)) {
         alert("you died");
         clearInterval(gameLoop);
       } else if (snake[0].x === apple.x && snake[0].y === apple.y) {
@@ -62,7 +66,7 @@ $(document).ready(function () {
       clearCanvas(ctx);
       drawSnake(snake, ctx);
       drawApple(apple, ctx);
-    }, 500);
+    }, 150);
   };
 
   const initializeCanvas = function () {
@@ -94,10 +98,21 @@ $(document).ready(function () {
   const drawCoord = function (x, y, color, canvas) {
     canvas.fillStyle = color;
     canvas.fillRect(x, y, 10, 10)
-  }
+  };
 
   const clearCanvas = function (canvas) {
     canvas.clearRect(0, 0, canvas.canvas.width, canvas.canvas.height);
+  };
+
+  const isEatingSelf = function (snake) {
+    for (let i = 0; i < snake.length; i++) {
+      for (let j = i + 1; j < snake.length; j++) {
+        if (snake[i].x === snake[j].x && snake[i].y === snake[j].y) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   playGame();
