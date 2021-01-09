@@ -14,8 +14,7 @@ $(document).ready(function () {
 
   const $gameWrapper = $('<div class="container game-wrapper" id="game-wrapper"></div>');
   const $scoreboard = $('<span class="scoreboard" id="scoreboard"></span>');
-  // use CSS grid
-  const $gameGrid = $('<div class="game-grid" id="game-grid"></div>');
+  const $gameCanvas = $('<canvas class="game-canvas" id="game-canvas"></canvas>');
   const $startButton = $('<span class="button button-start" id="start-button">Start</span>');
 
   // create event helper functions
@@ -23,4 +22,17 @@ $(document).ready(function () {
   // create event listeners
 
   // append elements to DOM
+  $nav.appendTo($body);
+  $navList.appendTo($nav);
+  $navListAbout.appendTo($navList);
+
+  $header.appendTo($body);
+  $title.appendTo($header);
+  $titleTextMain.appendTo($title);
+  $titleTextSecondary.appendTo($title);
+
+  $gameWrapper.appendTo($body);
+  $scoreboard.appendTo($gameWrapper);
+  $gameCanvas.appendTo($gameWrapper);
+  $startButton.appendTo($gameWrapper);
 });
