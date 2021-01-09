@@ -51,7 +51,6 @@ $(document).ready(function () {
     const gameLoop = setInterval(function () {
       snakeDirection = nextDirection;
       snake.unshift(coord(snake[0].x + nextDirection.x, snake[0].y + nextDirection.y));
-
       if (snake[0].x < 0 || snake[0].x >= 200 || snake[0].y < 0 || snake[0].y >= 200 ||
           isEatingSelf(snake)) {
         alert("you died");
@@ -66,7 +65,7 @@ $(document).ready(function () {
       clearCanvas(ctx);
       drawSnake(snake, ctx);
       drawApple(apple, ctx);
-    }, 150);
+    }, 100);
   };
 
   const initializeCanvas = function () {
@@ -79,11 +78,11 @@ $(document).ready(function () {
 
   const coord = function (x, y) {
     return {x: x, y: y};
-  }
+  };
 
   const getNewAppleCoord = function (xBound=200, yBound=200) {
     return coord(Math.floor(Math.random() * xBound/10) * 10, Math.floor(Math.random() * yBound/10) * 10);
-  }
+  };
 
   const drawSnake = function (snakeCoordinates, canvas) {
     snakeCoordinates.forEach(function (coord) {
@@ -97,7 +96,7 @@ $(document).ready(function () {
 
   const drawCoord = function (x, y, color, canvas) {
     canvas.fillStyle = color;
-    canvas.fillRect(x, y, 10, 10)
+    canvas.fillRect(x, y, 10, 10);
   };
 
   const clearCanvas = function (canvas) {
