@@ -33,8 +33,6 @@ $(document).ready(function () {
     let apple = getNewAppleCoord();
     let nextDirection = directionCoords.up;
 
-
-    // destroy this at end of game
     $(document).keyup(function (event) {
       if (event.originalEvent.code === "KeyW" && snakeDirection !== directionCoords.down) {
         nextDirection = directionCoords.up;
@@ -59,7 +57,9 @@ $(document).ready(function () {
         alert("you died");
         clearInterval(gameLoop);
       } else if (snake[0].x === apple.x && snake[0].y === apple.y) {
-        apple = getNewAppleCoord();
+        while (isOverlapping(snake, apple)) {
+          apple = getNewAppleCoord();
+        }
       } else {
         snake.pop();
       }
@@ -113,7 +113,16 @@ $(document).ready(function () {
       }
     }
     return false;
-  }
+  };
+
+  const isOverlapping = function (snake, apple) {
+    for (let i = 0; i < snake.length; i++) {
+      if (snake[i].x === apple.x && snake[i].y === apple.y) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   playGame();
 
