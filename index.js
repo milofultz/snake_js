@@ -5,7 +5,7 @@ $(document).ready(function () {
   // create new elements
   const $nav = $('<nav class="nav text-right" id="nav"></nav>');
   const $navList = $('<ul class="list" id="nav-list"></ul>');
-  const $navListAbout = $('<li class="list-item" id="nav-list-about"><img src="assets/GitHub-Mark-120px-plus.png" class="icon" id="github-icon"></li>');
+  const $navListAbout = $('<li class="list-item" id="nav-list-about"><a href="http://www.github.com/milofultz" target="_blank"><img src="assets/GitHub-Mark-120px-plus.png" class="icon" id="github-icon"></a></li>');
 
   const $header = $('<header class="header" id="header"></header>');
   const $title = $('<h1 class="title text-center" id="title"></h1>');
@@ -24,10 +24,10 @@ $(document).ready(function () {
   const keysCtrl = (function () {
     const keysets = [
       {
-        up: { code: 'KeyJ', label: 'J' },
-        down: { code: 'KeyK', label: 'K' },
-        left: { code: 'KeyH', label: 'H' },
-        right: { code: 'KeyL', label: 'L' },
+        up: { code: 'ArrowUp', label: 'Up' },
+        down: { code: 'ArrowDown', label: 'Down' },
+        left: { code: 'ArrowLeft', label: 'Left' },
+        right: { code: 'ArrowRight', label: 'Right' },
       },
       {
         up: { code: 'KeyW', label: 'W' },
@@ -36,10 +36,22 @@ $(document).ready(function () {
         right: { code: 'KeyD', label: 'D' },
       },
       {
-        up: { code: 'ArrowUp', label: 'Up' },
-        down: { code: 'ArrowDown', label: 'Down' },
-        left: { code: 'ArrowLeft', label: 'Left' },
-        right: { code: 'ArrowRight', label: 'Right' },
+        up: { code: 'KeyJ', label: 'J' },
+        down: { code: 'KeyK', label: 'K' },
+        left: { code: 'KeyH', label: 'H' },
+        right: { code: 'KeyL', label: 'L' },
+      },
+      {
+        up: { code: 'KeyD', label: 'D' },
+        down: { code: 'KeyC', label: 'C' },
+        left: { code: 'KeyA', label: 'A' },
+        right: { code: 'KeyS', label: 'S' },
+      },
+      {
+        up: { code: 'KeyI', label: 'I' },
+        down: { code: 'KeyJ', label: 'J' },
+        left: { code: 'KeyK', label: 'K' },
+        right: { code: 'KeyM', label: 'M' },
       }
     ]
     let currentKeysetIndex = 0;
