@@ -5,14 +5,14 @@ $(document).ready(function () {
   // create new elements
   const $nav = $('<nav class="nav" id="nav"></nav>');
   const $navList = $('<ul class="list" id="nav-list"></ul>');
-  const $navListAbout = $('<li class="list-item" id="nav-list-about"><img src="assets/github.png"></li>');
+  const $navListAbout = $('<li class="list-item" id="nav-list-about"><img src="assets/GitHub-Mark-120px-plus.png" class="icon" id="github-icon"></li>');
 
   const $header = $('<header class="header" id="header"></header>');
-  const $title = $('<h1 class="title" id="title"></h1>');
-  const $titleTextMain = $('<span class="title-text-main" id="main-title">SNAKEHACK</span>');
-  const $titleTextSecondary = $('<span class="title-text-secondary" id="secondary-title">where you have to move like a snake</span>');
+  const $title = $('<h1 class="title text-center" id="title"></h1>');
+  const $titleTextMain = $('<span class="title-text title-text-main" id="main-title">SNAKEHACK!</span>');
+  const $titleTextSecondary = $('<span class="title-text title-text-secondary" id="secondary-title">where you have to move like a snake</span>');
 
-  const $gameWrapper = $('<div class="container game-wrapper" id="game-wrapper"></div>');
+  const $gameWrapper = $('<div class="game-wrapper" id="game-wrapper"></div>');
   const $scoreboard = $('<span class="scoreboard" id="scoreboard"></span>');
   const $gameCanvas = $('<canvas class="game-canvas" id="game-canvas"></canvas>');
   const $startButton = $('<span class="button button-start" id="start-button">Start</span>');
@@ -53,7 +53,7 @@ $(document).ready(function () {
       snake.unshift(coord(snake[0].x + nextDirection.x, snake[0].y + nextDirection.y));
       if (snake[0].x < 0 || snake[0].x >= 200 || snake[0].y < 0 || snake[0].y >= 200 ||
           isEatingSelf(snake)) {
-        alert("you died");
+        // alert("you died");
         clearInterval(gameLoop);
       } else if (snake[0].x === apple.x && snake[0].y === apple.y) {
         while (isOverlapping(snake, apple)) {
