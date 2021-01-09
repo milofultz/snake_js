@@ -21,15 +21,38 @@ $(document).ready(function () {
   const playGame = function () {
     initializeCanvas();
 
+    // create the object to convert "direction" to coords
+    const directionCoords = {
+      up: coord(  0,  10),
+      down: coord(  0, -10),
+      right: coord( 10,  0 ),
+      left: coord(-10,  0 ),
+    };
+
     // create the snake array (array of coordinates)
-    let snake = [getRandomCoord()];
+    let snake = [coord(100,100)];
     // create the apple object (single coordinate)
     let apple = getRandomCoord();
     // create the direction var (last button pressed by user)
+    let direction = directionCoords.up;
+
 
     // create event listeners for keyup to change direction var
+    // destroy this at end of game
+    $(document).keyup(function (event) {
+      if (event.originalEvent.code === "KeyW") {
+        direction = directionCoords.up;
+      } else if (event.originalEvent.code === "KeyA") {
+        direction = directionCoords.left;
+      } else if (event.originalEvent.code === "KeyS") {
+        direction = directionCoords.down;
+      } else if (event.originalEvent.code === "KeyD") {
+        direction = directionCoords.right;
+      }
+    });
 
     // draw snake
+    drawSnake(snake);
     // draw apple
 
     // every second
@@ -53,12 +76,16 @@ $(document).ready(function () {
     return {x: x, y: y};
   }
 
-  const getRandomCoord = function () {
-    return coord(Math.floor(Math.random() * 20), Math.floor(Math.random() * 20));
+  const getRandomCoord = function (xBound=200, yBound=200) {
+    return coord(Math.floor(Math.random() * xBound), Math.floor(Math.random() * yBound));
   }
 
   const drawSnake = function (snakeCoordinates) {
-    //
+    const ctx = $gameCanvas[0].getContext('2d');
+    ctx.fillStyle = "black";
+    for (let i = 0; i < snakeCoordinates.length; i++) {
+      ctx.fillRect(snakeCoordinates[0].x, snakeCoordinates[0].y, 10, 10)
+    };
   };
 
   playGame();
