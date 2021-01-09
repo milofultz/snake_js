@@ -18,37 +18,60 @@ $(document).ready(function () {
   const $scoreboard = $('<span class="scoreboard" id="scoreboard"></span>');
   const $gameCanvas = $('<canvas class="game-canvas" id="game-canvas"></canvas>');
   const $startButton = $('<span class="button button-start" id="start-button">Start</span>');
-  // const $changeKeysButton = $('<span class="button button-change" id="change-keys-button">Change Keys</span>');
+  const $changeKeysButton = $('<span class="button button-change" id="change-keys-button">Change Keys</span>');
 
   // create event helper functions
   const keysCtrl = (function () {
+    const keysets = [
+      {
+        up: { code: 'KeyJ', label: 'J' },
+        down: { code: 'KeyK', label: 'K' },
+        left: { code: 'KeyH', label: 'H' },
+        right: { code: 'KeyL', label: 'L' },
+      },
+      {
+        up: { code: 'KeyW', label: 'W' },
+        down: { code: 'KeyS', label: 'S' },
+        left: { code: 'KeyA', label: 'A' },
+        right: { code: 'KeyD', label: 'D' },
+      },
+      {
+        up: { code: 'ArrowUp', label: 'Up' },
+        down: { code: 'ArrowDown', label: 'Down' },
+        left: { code: 'ArrowLeft', label: 'Left' },
+        right: { code: 'ArrowRight', label: 'Right' },
+      }
+    ]
+    let currentKeysetIndex = 0;
+    let currentKeyset = keysets[currentKeysetIndex];
+
     return {
+      changeKeyset: function () {
+        currentKeysetIndex = (currentKeysetIndex + 1) % keysets.length;
+        currentKeyset = keysets[currentKeysetIndex];
+      },
+      getKeyset: function () {
+        return currentKeyset;
+      },
       fillKeys: function () {
         $keysLegend.html('');
 
         const $keysHeader = $('<thead class="keys-header table-head" id="keys-header"></thead>');
         const $keysBody = $('<tbody class="keys-body table-body" id="keys-body"></tbody>');
 
-        const directions = {
+        const directionsLabels = {
           up: '↑',
           left: '←',
           down: '↓',
           right: '→'
         };
-        const keys = {
-          up: 'W',
-          down: 'S',
-          left: 'A',
-          right: 'D'
-        };
 
         const $keysHeaderRow = $('<tr class="keys-header-row table-row" id="keys-header-row"></tr>');
         const $keysActualRow = $('<tr class="keys-actual-row table-row" id="keys-actual-row"></tr>');
-        for (let dir in directions) {
-          const capDir = directions[dir][0].toUpperCase() + directions[dir].slice(1);
-          const $keysColHeading = $('<th class="table-col-heading table-cell" id="keys-heading-' + directions[dir] + '">' + capDir + '</th>');
+        for (let dir in directionsLabels) {
+          const $keysColHeading = $('<th class="table-col-heading table-cell" id="keys-heading-' + dir + '">' + directionsLabels[dir] + '</th>');
           $keysColHeading.appendTo($keysHeaderRow);
-          const $keysActual = $('<td class="table-data table-cell" id="keys-data-' + directions[dir] + '">' + keys[dir] + '</th>');
+          const $keysActual = $('<td class="table-data table-cell" id="keys-data-' + dir + '">' + currentKeyset[dir].label + '</th>');
           $keysActual.appendTo($keysActualRow);
         }
         $keysHeaderRow.appendTo($keysHeader);
@@ -138,14 +161,15 @@ $(document).ready(function () {
         let apple = getNewAppleCoord();
         let nextDirection = directionCoords.up;
 
+        let keyset = keysCtrl.getKeyset();
         $(document).keydown(function (event) {
-          if (event.originalEvent.code === "KeyW" && snakeDirection !== directionCoords.down) {
+          if (event.originalEvent.code === keyset.up.code && snakeDirection !== directionCoords.down) {
             nextDirection = directionCoords.up;
-          } else if (event.originalEvent.code === "KeyA" && snakeDirection !== directionCoords.right) {
+          } else if (event.originalEvent.code === keyset.left.code && snakeDirection !== directionCoords.right) {
             nextDirection = directionCoords.left;
-          } else if (event.originalEvent.code === "KeyS" && snakeDirection !== directionCoords.up) {
+          } else if (event.originalEvent.code === keyset.down.code && snakeDirection !== directionCoords.up) {
             nextDirection = directionCoords.down;
-          } else if (event.originalEvent.code === "KeyD" && snakeDirection !== directionCoords.left) {
+          } else if (event.originalEvent.code === keyset.right.code && snakeDirection !== directionCoords.left) {
             nextDirection = directionCoords.right;
           }
         });
@@ -181,8 +205,13 @@ $(document).ready(function () {
   keysCtrl.fillKeys();
 
   // create event listeners
-  $startButton.on('click', gameCtrl.play);
-  // $changeKeysButton.on('click', changeKeys);
+  $startButton.on('click', function () {
+    gameCtrl.play()
+  });
+  $changeKeysButton.on('click', function () {
+    keysCtrl.changeKeyset();
+    keysCtrl.fillKeys();
+  });
 
   // append elements to DOM
   $nav.appendTo($body);
