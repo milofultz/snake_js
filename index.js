@@ -19,25 +19,20 @@ $(document).ready(function () {
 
   // create event helper functions
   const playGame = function () {
-    initializeCanvas();
+    const ctx = initializeCanvas();
 
-    // create the object to convert "direction" to coords
     const directionCoords = {
-      up: coord(  0,  10),
-      down: coord(  0, -10),
+      up: coord(  0,  -10),
+      down: coord(  0, 10),
       right: coord( 10,  0 ),
       left: coord(-10,  0 ),
     };
 
-    // create the snake array (array of coordinates)
     let snake = [coord(100,100)];
-    // create the apple object (single coordinate)
-    let apple = getRandomCoord();
-    // create the direction var (last button pressed by user)
+    let apple = getNewAppleCoord();
     let direction = directionCoords.up;
 
 
-    // create event listeners for keyup to change direction var
     // destroy this at end of game
     $(document).keyup(function (event) {
       if (event.originalEvent.code === "KeyW") {
@@ -51,18 +46,23 @@ $(document).ready(function () {
       }
     });
 
-    // draw snake
-    drawSnake(snake);
-    // draw apple
+    drawSnake(snake, ctx);
+    drawApple(apple, ctx);
 
-    // every second
-      // add one element to head of snake at coordinate + (direction offset)
-      // if current snake head is out of bounds
-        // end game
-      // else if current snake head is not apple coordinate
-        // pop one element from end
-      // draw snake
-      // draw apple
+    const gameLoop = setInterval(function () {
+      snake.unshift(coord(snake[0].x + direction.x, snake[0].y + direction.y));
+      if (snake[0].x < 0 || snake[0].x > 200 || snake[0].y < 0 || snake[0].y > 200) {
+        alert("you died");
+        clearInterval(gameLoop);
+      } else if (snake[0].x === apple.x && snake[0].y === apple.y) {
+        apple = getNewAppleCoord();
+      } else {
+        snake.pop();
+      }
+      clearCanvas(ctx);
+      drawSnake(snake, ctx);
+      drawApple(apple, ctx);
+    }, 500);
   };
 
   const initializeCanvas = function () {
@@ -70,23 +70,32 @@ $(document).ready(function () {
     const ctx = $gameCanvas[0].getContext('2d');
     ctx.canvas.width  = 200;
     ctx.canvas.height = 200;
+    return ctx;
   };
 
   const coord = function (x, y) {
     return {x: x, y: y};
   }
 
-  const getRandomCoord = function (xBound=200, yBound=200) {
-    return coord(Math.floor(Math.random() * xBound), Math.floor(Math.random() * yBound));
+  const getNewAppleCoord = function (xBound=200, yBound=200) {
+    return coord(Math.floor(Math.random() * xBound/10) * 10, Math.floor(Math.random() * yBound/10) * 10);
   }
 
-  const drawSnake = function (snakeCoordinates) {
-    const ctx = $gameCanvas[0].getContext('2d');
-    ctx.fillStyle = "black";
+  const drawSnake = function (snakeCoordinates, canvas) {
+    canvas.fillStyle = "black";
     for (let i = 0; i < snakeCoordinates.length; i++) {
-      ctx.fillRect(snakeCoordinates[0].x, snakeCoordinates[0].y, 10, 10)
+      canvas.fillRect(snakeCoordinates[i].x, snakeCoordinates[i].y, 10, 10)
     };
   };
+
+  const drawApple = function (apple, canvas) {
+    canvas.fillStyle = "red";
+    canvas.fillRect(apple.x, apple.y, 10, 10)
+  };
+
+  const clearCanvas = function (canvas) {
+    canvas.clearRect(0, 0, canvas.canvas.width, canvas.canvas.height);
+  }
 
   playGame();
 
