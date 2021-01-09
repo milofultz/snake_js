@@ -82,16 +82,19 @@ $(document).ready(function () {
   }
 
   const drawSnake = function (snakeCoordinates, canvas) {
-    canvas.fillStyle = "black";
-    for (let i = 0; i < snakeCoordinates.length; i++) {
-      canvas.fillRect(snakeCoordinates[i].x, snakeCoordinates[i].y, 10, 10)
-    };
+    snakeCoordinates.forEach(function (coord) {
+      drawCoord(coord.x, coord.y, "black", canvas);
+    });
   };
 
   const drawApple = function (apple, canvas) {
-    canvas.fillStyle = "red";
-    canvas.fillRect(apple.x, apple.y, 10, 10)
+    drawCoord(apple.x, apple.y, "red", canvas);
   };
+
+  const drawCoord = function (x, y, color, canvas) {
+    canvas.fillStyle = color;
+    canvas.fillRect(x, y, 10, 10)
+  }
 
   const clearCanvas = function (canvas) {
     canvas.clearRect(0, 0, canvas.canvas.width, canvas.canvas.height);
