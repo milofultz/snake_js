@@ -25,6 +25,10 @@ body {
 
 /* || Utility Classes */
 
+.center {
+  margin: auto;
+}
+
 .text-center {
   text-align: center;
 }
@@ -58,6 +62,18 @@ body {
 
 .main-text {
   font-size: 1.6rem;
+}
+
+.table {
+  table-layout: fixed;
+}
+
+.table-cell {
+  width: 5rem;
+}
+
+.table-col-heading {
+  font-size: 2rem;
 }
 
 .title-text {

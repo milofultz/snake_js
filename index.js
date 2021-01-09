@@ -11,8 +11,8 @@ $(document).ready(function () {
   const $title = $('<h1 class="title text-center" id="title"></h1>');
   const $titleTextMain = $('<span class="title-text title-text-main" id="main-title">SNAKEHACK!</span>');
   const $titleTextSecondary = $('<span class="title-text title-text-secondary" id="secondary-title">where you have to move like a snake</span>');
-  const $rules = $('<div class="rules text-center" id="rules"><strong class="main-text rules-header" id="rules-header">Rules:</strong></div>');
-  const $rulesLegend = $('<table class="rules-legend table" id="rules-legend"></table>');
+  const $keys = $('<div class="rules text-center" id="rules"><strong class="main-text rules-header" id="rules-header">Keys:</strong></div>');
+  const $keysLegend = $('<table class="rules-legend table center" id="rules-legend" summary="Which keys do which direction"></table>');
 
   const $gameWrapper = $('<div class="game-wrapper text-center" id="game-wrapper"></div>');
   const $scoreboard = $('<span class="scoreboard" id="scoreboard"></span>');
@@ -20,6 +20,40 @@ $(document).ready(function () {
   const $startButton = $('<span class="button button-start" id="start-button">Start</span>');
 
   // create event helper functions
+  const fillKeys = function () {
+    $keysLegend.html('');
+
+    const $keysHeader = $('<thead class="keys-header table-head" id="keys-header"></thead>');
+    const $keysBody = $('<tbody class="keys-body table-body" id="keys-body"></tbody>');
+
+    const directions = {
+      up: '↑',
+      left: '←',
+      down: '↓',
+      right: '→'
+    };
+    const keys = {
+      up: 'W',
+      down: 'S',
+      left: 'A',
+      right: 'D'
+    };
+
+    const $keysHeaderRow = $('<tr class="keys-header-row table-row" id="keys-header-row"></tr>');
+    const $keysActualRow = $('<tr class="keys-actual-row table-row" id="keys-actual-row"></tr>');
+    for (let dir in directions) {
+      const capDir = directions[dir][0].toUpperCase() + directions[dir].slice(1);
+      const $keysColHeading = $('<th class="table-col-heading table-cell" id="keys-heading-' + directions[dir] + '">' + capDir + '</th>');
+      $keysColHeading.appendTo($keysHeaderRow);
+      const $keysActual = $('<td class="table-data table-cell" id="keys-data-' + directions[dir] + '">' + keys[dir] + '</th>');
+      $keysActual.appendTo($keysActualRow);
+    }
+    $keysHeaderRow.appendTo($keysHeader);
+    $keysActualRow.appendTo($keysBody);
+    $keysHeader.appendTo($keysLegend);
+    $keysActualRow.appendTo($keysLegend);
+  };
+
   const game = function () {
     const ctx = $gameCanvas[0].getContext('2d');
 
@@ -140,6 +174,7 @@ $(document).ready(function () {
   };
 
   const newGame = game();
+  fillKeys();
 
   // create event listeners
   $startButton.on('click', newGame.play);
@@ -153,7 +188,8 @@ $(document).ready(function () {
   $title.appendTo($header);
   $titleTextMain.appendTo($title);
   $titleTextSecondary.appendTo($title);
-  $rules.appendTo($header);
+  $keys.appendTo($header);
+  $keysLegend.appendTo($keys);
 
   $gameWrapper.appendTo($body);
   $scoreboard.appendTo($gameWrapper);
