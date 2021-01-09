@@ -3,7 +3,7 @@ $(document).ready(function () {
   const $body = $('body');
 
   // create new elements
-  const $nav = $('<nav class="nav" id="nav"></nav>');
+  const $nav = $('<nav class="nav text-right" id="nav"></nav>');
   const $navList = $('<ul class="list" id="nav-list"></ul>');
   const $navListAbout = $('<li class="list-item" id="nav-list-about"><img src="assets/GitHub-Mark-120px-plus.png" class="icon" id="github-icon"></li>');
 
@@ -20,15 +20,16 @@ $(document).ready(function () {
   // create event helper functions
   const playGame = function () {
     const ctx = initializeCanvas();
+    sizeCanvas(ctx);
 
     const directionCoords = {
-      up: coord(  0,  -10),
-      down: coord(  0, 10),
-      right: coord( 10,  0 ),
-      left: coord(-10,  0 ),
+      up: coord(0, -100),
+      down: coord(0, 100),
+      right: coord(100, 0),
+      left: coord(-100, 0),
     };
 
-    let snake = [coord(100,100)];
+    let snake = [coord(1000,1000)];
     let snakeDirection = directionCoords.up;
     let apple = getNewAppleCoord();
     let nextDirection = directionCoords.up;
@@ -51,7 +52,7 @@ $(document).ready(function () {
     const gameLoop = setInterval(function () {
       snakeDirection = nextDirection;
       snake.unshift(coord(snake[0].x + nextDirection.x, snake[0].y + nextDirection.y));
-      if (snake[0].x < 0 || snake[0].x >= 200 || snake[0].y < 0 || snake[0].y >= 200 ||
+      if (snake[0].x < 0 || snake[0].x >= 2000 || snake[0].y < 0 || snake[0].y >= 2000 ||
           isEatingSelf(snake)) {
         // alert("you died");
         clearInterval(gameLoop);
@@ -71,17 +72,20 @@ $(document).ready(function () {
   const initializeCanvas = function () {
     // create canvas context
     const ctx = $gameCanvas[0].getContext('2d');
-    ctx.canvas.width  = 200;
-    ctx.canvas.height = 200;
     return ctx;
   };
+
+  const sizeCanvas = function (canvas) {
+    canvas.canvas.width  = 2000;
+    canvas.canvas.height = 2000;
+  }
 
   const coord = function (x, y) {
     return {x: x, y: y};
   };
 
-  const getNewAppleCoord = function (xBound=200, yBound=200) {
-    return coord(Math.floor(Math.random() * xBound/10) * 10, Math.floor(Math.random() * yBound/10) * 10);
+  const getNewAppleCoord = function (xBound=2000, yBound=2000) {
+    return coord(Math.floor(Math.random() * xBound/100) * 100, Math.floor(Math.random() * yBound/100) * 100);
   };
 
   const drawSnake = function (snakeCoordinates, canvas) {
@@ -96,7 +100,7 @@ $(document).ready(function () {
 
   const drawCoord = function (x, y, color, canvas) {
     canvas.fillStyle = color;
-    canvas.fillRect(x, y, 10, 10);
+    canvas.fillRect(x, y, 100, 100);
   };
 
   const clearCanvas = function (canvas) {
