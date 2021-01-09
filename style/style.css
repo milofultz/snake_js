@@ -29,6 +29,10 @@ body {
   text-align: center;
 }
 
+.text-right {
+  text-align: right;
+}
+
 /* || Sitewide Styles */
 
 .button {
@@ -36,6 +40,10 @@ body {
   border-radius: 1rem;
   cursor: pointer;
   padding: 1rem;
+}
+
+.header {
+  margin-bottom: 2rem;
 }
 
 .icon {
@@ -63,9 +71,11 @@ body {
 }
 
 .game-wrapper {
-  height: 75vh;
+  height: calc((.66vw + 1vh)/2 * 50);
   margin: auto;
-  width: 75vh;
+  max-height: 60rem;
+  max-width: 60rem;
+  width: calc((.66vw + 1vh)/2 * 50);
 }
 
 .game-canvas {
