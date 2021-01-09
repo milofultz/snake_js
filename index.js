@@ -21,39 +21,43 @@ $(document).ready(function () {
   // const $changeKeysButton = $('<span class="button button-change" id="change-keys-button">Change Keys</span>');
 
   // create event helper functions
-  const fillKeys = function () {
-    $keysLegend.html('');
+  const keysCtrl = (function () {
+    return {
+      fillKeys: function () {
+        $keysLegend.html('');
 
-    const $keysHeader = $('<thead class="keys-header table-head" id="keys-header"></thead>');
-    const $keysBody = $('<tbody class="keys-body table-body" id="keys-body"></tbody>');
+        const $keysHeader = $('<thead class="keys-header table-head" id="keys-header"></thead>');
+        const $keysBody = $('<tbody class="keys-body table-body" id="keys-body"></tbody>');
 
-    const directions = {
-      up: '↑',
-      left: '←',
-      down: '↓',
-      right: '→'
+        const directions = {
+          up: '↑',
+          left: '←',
+          down: '↓',
+          right: '→'
+        };
+        const keys = {
+          up: 'W',
+          down: 'S',
+          left: 'A',
+          right: 'D'
+        };
+
+        const $keysHeaderRow = $('<tr class="keys-header-row table-row" id="keys-header-row"></tr>');
+        const $keysActualRow = $('<tr class="keys-actual-row table-row" id="keys-actual-row"></tr>');
+        for (let dir in directions) {
+          const capDir = directions[dir][0].toUpperCase() + directions[dir].slice(1);
+          const $keysColHeading = $('<th class="table-col-heading table-cell" id="keys-heading-' + directions[dir] + '">' + capDir + '</th>');
+          $keysColHeading.appendTo($keysHeaderRow);
+          const $keysActual = $('<td class="table-data table-cell" id="keys-data-' + directions[dir] + '">' + keys[dir] + '</th>');
+          $keysActual.appendTo($keysActualRow);
+        }
+        $keysHeaderRow.appendTo($keysHeader);
+        $keysActualRow.appendTo($keysBody);
+        $keysHeader.appendTo($keysLegend);
+        $keysActualRow.appendTo($keysLegend);
+      }
     };
-    const keys = {
-      up: 'W',
-      down: 'S',
-      left: 'A',
-      right: 'D'
-    };
-
-    const $keysHeaderRow = $('<tr class="keys-header-row table-row" id="keys-header-row"></tr>');
-    const $keysActualRow = $('<tr class="keys-actual-row table-row" id="keys-actual-row"></tr>');
-    for (let dir in directions) {
-      const capDir = directions[dir][0].toUpperCase() + directions[dir].slice(1);
-      const $keysColHeading = $('<th class="table-col-heading table-cell" id="keys-heading-' + directions[dir] + '">' + capDir + '</th>');
-      $keysColHeading.appendTo($keysHeaderRow);
-      const $keysActual = $('<td class="table-data table-cell" id="keys-data-' + directions[dir] + '">' + keys[dir] + '</th>');
-      $keysActual.appendTo($keysActualRow);
-    }
-    $keysHeaderRow.appendTo($keysHeader);
-    $keysActualRow.appendTo($keysBody);
-    $keysHeader.appendTo($keysLegend);
-    $keysActualRow.appendTo($keysLegend);
-  };
+  })();
 
   const gameCtrl = (function () {
     const ctx = $gameCanvas[0].getContext('2d');
@@ -174,7 +178,7 @@ $(document).ready(function () {
     }
   })();
 
-  fillKeys();
+  keysCtrl.fillKeys();
 
   // create event listeners
   $startButton.on('click', gameCtrl.play);
