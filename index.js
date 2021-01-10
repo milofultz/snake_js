@@ -170,6 +170,7 @@ $(document).ready(function () {
     let currentSpeedIndex = 1;
     let currentSpeed = speedSettings[1].speed;
     let changeKeysSwitch = false;
+    let gameInPlay = false;
 
     return {
       toggleChangeKeys: function () {
@@ -183,6 +184,9 @@ $(document).ready(function () {
         $speedButton.text(currentLabel);
         $speedButton.removeClass('speed-' + lastLabel.toLowerCase().replace(' ', '-'))
                     .addClass('speed-' + currentLabel.toLowerCase().replace(' ', '-'));
+      },
+      gameInPlay: function () {
+        return gameInPlay;
       },
       play: function () {
 
@@ -226,6 +230,7 @@ $(document).ready(function () {
         const stopGame = function () {
           clearInterval(keyChanger);
           clearInterval(gameLoop);
+          gameInPlay = false;
           $startButton.off('click', stopGame);
         };
 
@@ -292,6 +297,12 @@ $(document).ready(function () {
   keysCtrl.fillKeys();
 
   // create event listeners
+  $keys.on('click', function () {
+    if (!gameCtrl.gameInPlay()) {
+      keysCtrl.changeKeyset();
+      keysCtrl.fillKeys();
+    }
+  });
   $startButton.on('click', function () {
     gameCtrl.play();
   });
