@@ -96,7 +96,7 @@ $(document).ready(function () {
   })();
 
   const gameCtrl = (function () {
-    const ctx = $gameCanvas[0].getContext('2d');
+    const canvas = $gameCanvas[0].getContext('2d');
 
     const sizeCanvas = function (canvas) {
       canvas.canvas.width  = 2000;
@@ -124,6 +124,14 @@ $(document).ready(function () {
     const drawCoord = function (x, y, color, canvas) {
       canvas.fillStyle = color;
       canvas.fillRect(x, y, 100, 100);
+    };
+
+    const writeText = function (text, color, canvas) {
+      canvas.font = "200px sans-serif";
+      canvas.fillStyle = color;
+      canvas.textAlign = "center";
+      canvas.fillText(text, 1000, 1000);
+      canvas.strokeText(text, 1000, 1000);
     };
 
     const clearCanvas = function (canvas) {
@@ -170,8 +178,8 @@ $(document).ready(function () {
                     .addClass('speed-' + currentLabel.toLowerCase().replace(' ', '-'));
       },
       play: function () {
-        clearCanvas(ctx);
-        sizeCanvas(ctx);
+        clearCanvas(canvas);
+        sizeCanvas(canvas);
 
         const directionCoords = {
           up: coord(0, -100),
@@ -201,8 +209,8 @@ $(document).ready(function () {
             nextDirection = directionCoords.right;
           }
         });
-        drawSnake(snake, ctx);
-        drawApple(apple, ctx);
+        drawSnake(snake, canvas);
+        drawApple(apple, canvas);
 
         const stopGame = function () {
           clearInterval(gameLoop);
@@ -211,16 +219,16 @@ $(document).ready(function () {
 
         $startButton.on('click', stopGame);
 
-        const gameLoop = setInterval(function () {
+        let gameLoop = setInterval(function () {
           gameInPlay = true;
 
           snakeDirection = nextDirection;
           snake.unshift(coord(snake[0].x + nextDirection.x, snake[0].y + nextDirection.y));
           if (snake[0].x < 0 || snake[0].x >= 2000 || snake[0].y < 0 || snake[0].y >= 2000 ||
               isEatingSelf(snake)) {
-            // alert("you died");
-            gameInPlay = false;
-            clearInterval(gameLoop);
+            writeText("You lost!", "rgba(0, 0, 0, 1)", canvas);
+            stopGame();
+            return;
           } else if (snake[0].x === apple.x && snake[0].y === apple.y) {
             while (isOverlapping(snake, apple)) {
               apple = getNewAppleCoord();
@@ -228,9 +236,9 @@ $(document).ready(function () {
           } else {
             snake.pop();
           }
-          clearCanvas(ctx);
-          drawSnake(snake, ctx);
-          drawApple(apple, ctx);
+          clearCanvas(canvas);
+          drawSnake(snake, canvas);
+          drawApple(apple, canvas);
         }, currentSpeed);
       }
     }
