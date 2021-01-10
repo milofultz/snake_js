@@ -17,9 +17,9 @@ $(document).ready(function () {
   const $gameWrapper = $('<div class="game-wrapper text-center" id="game-wrapper"></div>');
   const $scoreboard = $('<span class="scoreboard" id="scoreboard"></span>');
   const $gameCanvas = $('<canvas class="game-canvas" id="game-canvas"></canvas>');
-  const $startButton = $('<span class="button button-start" id="start-button">Start</span>');
-  const $changeKeysButton = $('<span class="button button-change" id="change-keys-button">Change Keys</span>');
-  const $speedButton = $('<span class="button button-speed speed-normal" id="speed-button">Normal</span>');
+  const $startButton = $('<span class="button button-start disable-select" id="start-button">Start</span>');
+  const $changeKeysButton = $('<span class="button button-change disable-select" id="change-keys-button">Change Keys</span>');
+  const $speedButton = $('<span class="button button-speed speed-normal disable-select" id="speed-button">Normal</span>');
 
   // create event helper functions
   const keysCtrl = (function () {
