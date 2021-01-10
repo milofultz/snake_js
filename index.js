@@ -204,6 +204,7 @@ $(document).ready(function () {
         let snakeDirection = directionCoords.up;
         let apple = getNewAppleCoord();
         let nextDirection = directionCoords.up;
+        let score = 0;
         let gameText = '';
 
         // define helper functions
@@ -246,6 +247,7 @@ $(document).ready(function () {
         sizeCanvas(canvas);
         drawSnake(snake, canvas);
         drawApple(apple, canvas);
+        $score.text(score);
         keyChanger();
         if (changeKeysSwitch) {
           let keyChangeTimer = setInterval(function () {
@@ -281,6 +283,8 @@ $(document).ready(function () {
             stopGame();``
             return;
           } else if (snake[0].x === apple.x && snake[0].y === apple.y) {
+            score += 1;
+            $score.text(score);
             while (isOverlapping(snake, apple)) {
               apple = getNewAppleCoord();
             }
