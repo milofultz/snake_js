@@ -11,8 +11,10 @@ $(document).ready(function () {
   const $title = $('<h1 class="title text-center" id="title"></h1>');
   const $titleTextMain = $('<span class="title-text title-text-main" id="main-title">SNAKEHACK!</span>');
   const $titleTextSecondary = $('<span class="title-text title-text-secondary" id="secondary-title">where you have to move like a snake</span>');
-  const $keys = $('<div class="rules text-center" id="rules"><strong class="main-text rules-header" id="rules-header">Keys:</strong></div>');
-  const $keysLegend = $('<table class="rules-legend table center" id="rules-legend" summary="Which keys do which direction"></table>');
+  const $keys = $('<div class="keys text-center disable-select" id="keys"><strong class="main-text rules-header" id="rules-header">Keys:</strong></div>');
+  const $keysLegend = $('<table class="keys-legend table center" id="keys-legend" summary="Which keys do which direction"></table>');
+  const $scoreWrapper = $('<div class="score-wrapper text-center disable-select" id="score-wrapper">Score: </div>');
+  const $score = $('<span class="score" id="score"></span>');
 
   const $gameWrapper = $('<div class="game-wrapper text-center" id="game-wrapper"></div>');
   const $scoreboard = $('<span class="scoreboard" id="scoreboard"></span>');
@@ -327,6 +329,8 @@ $(document).ready(function () {
   $titleTextSecondary.appendTo($title);
   $keys.appendTo($header);
   $keysLegend.appendTo($keys);
+  $scoreWrapper.appendTo($header);
+  $score.appendTo($scoreWrapper);
 
   $gameWrapper.appendTo($body);
   $scoreboard.appendTo($gameWrapper);
