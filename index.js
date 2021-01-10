@@ -66,6 +66,9 @@ $(document).ready(function () {
       getKeyset: function () {
         return currentKeyset;
       },
+      getKeysetText: function () {
+        return currentKeyset.up.label + currentKeyset.left.label + currentKeyset.down.label + currentKeyset.right.label;
+      },
       fillKeys: function () {
         $keysLegend.html('');
 
@@ -159,15 +162,19 @@ $(document).ready(function () {
     };
 
     let speedSettings = [
-      { speed: 500, label: "Slow" },
-      { speed: 250, label: "Normal" },
+      { speed: 300, label: "Slow" },
+      { speed: 150, label: "Normal" },
       { speed: 100, label: "Fast" },
       { speed: 50, label: "Very Fast" }
     ];
     let currentSpeedIndex = 1;
     let currentSpeed = speedSettings[1].speed;
+    let changeKeysSwitch = false;
 
     return {
+      toggleChangeKeys: function () {
+        changeKeysSwitch = changeKeysSwitch ? false : true;
+      },
       changeSpeed: function () {
         currentSpeedIndex = (currentSpeedIndex + 1) % speedSettings.length;
         currentSpeed = speedSettings[currentSpeedIndex].speed;
@@ -192,32 +199,61 @@ $(document).ready(function () {
         let snakeDirection = directionCoords.up;
         let apple = getNewAppleCoord();
         let nextDirection = directionCoords.up;
+        let gameText = '';
 
-        let keyset = keysCtrl.getKeyset();
-        $(document).keydown(function (event) {
-          if (event.originalEvent.code === keyset.up.code && snakeDirection !== directionCoords.down) {
-            event.preventDefault();
-            nextDirection = directionCoords.up;
-          } else if (event.originalEvent.code === keyset.left.code && snakeDirection !== directionCoords.right) {
-            event.preventDefault();
-            nextDirection = directionCoords.left;
-          } else if (event.originalEvent.code === keyset.down.code && snakeDirection !== directionCoords.up) {
-            event.preventDefault();
-            nextDirection = directionCoords.down;
-          } else if (event.originalEvent.code === keyset.right.code && snakeDirection !== directionCoords.left) {
-            event.preventDefault();
-            nextDirection = directionCoords.right;
-          }
-        });
         drawSnake(snake, canvas);
         drawApple(apple, canvas);
 
         const stopGame = function () {
+          clearInterval(keyChanger);
           clearInterval(gameLoop);
           $startButton.off('click', stopGame);
         };
 
         $startButton.on('click', stopGame);
+
+        const keyChanger = function () {
+          keysCtrl.fillKeys();
+          let keyset = keysCtrl.getKeyset();
+          $(document).off('keydown');
+          $(document).keydown(function (event) {
+            if (event.originalEvent.code === keyset.up.code && snakeDirection !== directionCoords.down) {
+              event.preventDefault();
+              nextDirection = directionCoords.up;
+            } else if (event.originalEvent.code === keyset.left.code && snakeDirection !== directionCoords.right) {
+              event.preventDefault();
+              nextDirection = directionCoords.left;
+            } else if (event.originalEvent.code === keyset.down.code && snakeDirection !== directionCoords.up) {
+              event.preventDefault();
+              nextDirection = directionCoords.down;
+            } else if (event.originalEvent.code === keyset.right.code && snakeDirection !== directionCoords.left) {
+              event.preventDefault();
+              nextDirection = directionCoords.right;
+            }
+          });
+        };
+
+        keyChanger();
+
+        if (changeKeysSwitch) {
+          let keyChangeTimer = setInterval(function () {
+            keyChanger();
+            keysCtrl.changeKeyset();
+            const keyText = keysCtrl.getKeysetText();
+            setTimeout(function () {
+              gameText = '3: ' + keyText;
+            }, 9000);
+            setTimeout(function () {
+              gameText = '2: ' + keyText;
+            }, 10000);
+            setTimeout(function () {
+              gameText = '1: ' + keyText;
+            }, 11000);
+            setTimeout(function () {
+              gameText = '';
+            }, 11999);
+          }, 12000);
+        }
 
         let gameLoop = setInterval(function () {
           gameInPlay = true;
@@ -226,8 +262,9 @@ $(document).ready(function () {
           snake.unshift(coord(snake[0].x + nextDirection.x, snake[0].y + nextDirection.y));
           if (snake[0].x < 0 || snake[0].x >= 2000 || snake[0].y < 0 || snake[0].y >= 2000 ||
               isEatingSelf(snake)) {
+            clearCanvas(canvas);
             writeText("You lost!", "rgba(0, 0, 0, 1)", canvas);
-            stopGame();
+            stopGame();``
             return;
           } else if (snake[0].x === apple.x && snake[0].y === apple.y) {
             while (isOverlapping(snake, apple)) {
@@ -239,6 +276,7 @@ $(document).ready(function () {
           clearCanvas(canvas);
           drawSnake(snake, canvas);
           drawApple(apple, canvas);
+          writeText(gameText, "rgba(0, 0, 0, 1)", canvas);
         }, currentSpeed);
       }
     }
@@ -248,11 +286,15 @@ $(document).ready(function () {
 
   // create event listeners
   $startButton.on('click', function () {
-    gameCtrl.play()
+    gameCtrl.play();
   });
   $changeKeysButton.on('click', function () {
-    keysCtrl.changeKeyset();
-    keysCtrl.fillKeys();
+    gameCtrl.toggleChangeKeys();
+    if (Array.from($changeKeysButton[0].classList).includes('button-on')) {
+      $changeKeysButton.removeClass('button-on');
+    } else {
+      $changeKeysButton.addClass('button-on');
+    }
   });
   $speedButton.on('click', gameCtrl.changeSpeed);
 

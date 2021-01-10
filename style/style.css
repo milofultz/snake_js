@@ -120,6 +120,10 @@ body {
   width: 100%;
 }
 
+.button-on {
+  background-color: rgb(255, 193, 78);
+}
+
 .speed-slow {
   background-color: rgb(78, 78, 255);
 }
