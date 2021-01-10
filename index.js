@@ -159,8 +159,6 @@ $(document).ready(function () {
     let currentSpeedIndex = 1;
     let currentSpeed = speedSettings[1].speed;
 
-    let gameInPlay = false;
-
     return {
       changeSpeed: function () {
         currentSpeedIndex = (currentSpeedIndex + 1) % speedSettings.length;
@@ -172,11 +170,6 @@ $(document).ready(function () {
                     .addClass('speed-' + currentLabel.toLowerCase().replace(' ', '-'));
       },
       play: function () {
-        if (gameInPlay) {
-          console.log("game in play");
-          return;
-        }
-
         clearCanvas(ctx);
         sizeCanvas(ctx);
 
@@ -208,9 +201,15 @@ $(document).ready(function () {
             nextDirection = directionCoords.right;
           }
         });
-
         drawSnake(snake, ctx);
         drawApple(apple, ctx);
+
+        const stopGame = function () {
+          clearInterval(gameLoop);
+          $startButton.off('click', stopGame);
+        };
+
+        $startButton.on('click', stopGame);
 
         const gameLoop = setInterval(function () {
           gameInPlay = true;
