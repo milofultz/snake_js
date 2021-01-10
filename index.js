@@ -185,8 +185,8 @@ $(document).ready(function () {
                     .addClass('speed-' + currentLabel.toLowerCase().replace(' ', '-'));
       },
       play: function () {
-        clearCanvas(canvas);
-        sizeCanvas(canvas);
+
+        // define vars
 
         const directionCoords = {
           up: coord(0, -100),
@@ -194,23 +194,13 @@ $(document).ready(function () {
           right: coord(100, 0),
           left: coord(-100, 0),
         };
-
         let snake = [coord(1000,1000)];
         let snakeDirection = directionCoords.up;
         let apple = getNewAppleCoord();
         let nextDirection = directionCoords.up;
         let gameText = '';
 
-        drawSnake(snake, canvas);
-        drawApple(apple, canvas);
-
-        const stopGame = function () {
-          clearInterval(keyChanger);
-          clearInterval(gameLoop);
-          $startButton.off('click', stopGame);
-        };
-
-        $startButton.on('click', stopGame);
+        // define helper functions
 
         const keyChanger = function () {
           keysCtrl.fillKeys();
@@ -233,8 +223,23 @@ $(document).ready(function () {
           });
         };
 
-        keyChanger();
+        const stopGame = function () {
+          clearInterval(keyChanger);
+          clearInterval(gameLoop);
+          $startButton.off('click', stopGame);
+        };
 
+        // start event listeners
+
+        $startButton.on('click', stopGame);
+
+        // prepare for game
+
+        clearCanvas(canvas);
+        sizeCanvas(canvas);
+        drawSnake(snake, canvas);
+        drawApple(apple, canvas);
+        keyChanger();
         if (changeKeysSwitch) {
           let keyChangeTimer = setInterval(function () {
             keyChanger();
@@ -254,6 +259,8 @@ $(document).ready(function () {
             }, 11999);
           }, 12000);
         }
+
+        // run game
 
         let gameLoop = setInterval(function () {
           gameInPlay = true;
