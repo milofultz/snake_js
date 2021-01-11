@@ -7,10 +7,13 @@ $(document).ready(function () {
   const $navList = $('<ul class="list" id="nav-list"></ul>');
   const $navListAbout = $('<li class="list-item" id="nav-list-about"><a href="http://www.github.com/milofultz" target="_blank"><img src="assets/GitHub-Mark-120px-plus.png" class="icon github-icon" id="github-icon"></a></li>');
 
-  const $header = $('<header class="header" id="header"></header>');
+  const $main = $('<main class="main container" id="main"></main>');
+
   const $title = $('<h1 class="title text-center" id="title"></h1>');
   const $titleTextMain = $('<span class="title-text title-text-main" id="main-title">SNAKEHACK!</span>');
   const $titleTextSecondary = $('<span class="title-text title-text-secondary" id="secondary-title">where you have to move like a snake</span>');
+
+  const $header = $('<header class="header" id="header"></header>');
   const $keys = $('<div class="keys text-center disable-select" id="keys"><strong class="main-text rules-header" id="rules-header">Keys:</strong></div>');
   const $keysLegend = $('<table class="keys-legend table center" id="keys-legend" summary="Which keys do which direction"></table>');
   const $scoreWrapper = $('<div class="score-wrapper text-center disable-select" id="score-wrapper">Score: </div>');
@@ -20,7 +23,7 @@ $(document).ready(function () {
   const $scoreboard = $('<span class="scoreboard" id="scoreboard"></span>');
   const $gameCanvas = $('<canvas class="game-canvas" id="game-canvas"></canvas>');
   const $startButton = $('<span class="button button-start disable-select" id="start-button">Start</span>');
-  const $changeKeysButton = $('<span class="button button-change disable-select" id="change-keys-button">Change Keys</span>');
+  const $changeKeysButton = $('<span class="button button-change button-on disable-select" id="change-keys-button">Change Keys</span>');
   const $speedButton = $('<span class="button button-speed speed-normal disable-select" id="speed-button">Normal</span>');
 
   // create event helper functions
@@ -173,7 +176,7 @@ $(document).ready(function () {
     ];
     let currentSpeedIndex = 1;
     let currentSpeed = speedSettings[1].speed;
-    let changeKeysSwitch = false;
+    let changeKeysSwitch = true;
     let gameInPlay = false;
     clearCanvas(canvas);
 
@@ -194,7 +197,6 @@ $(document).ready(function () {
         return gameInPlay;
       },
       play: function () {
-        if (gameInPlay) return;
         gameInPlay = true;
 
         // define vars
@@ -235,25 +237,6 @@ $(document).ready(function () {
           });
         };
 
-        const stopGame = function () {
-          clearInterval(keyChangeTimer);
-          clearInterval(gameLoop);
-          gameInPlay = false;
-          $startButton.off('click', stopGame);
-        };
-
-        // start event listeners
-
-        $startButton.on('click', stopGame);
-
-        // prepare for game
-
-        sizeCanvas(canvas);
-        clearCanvas(canvas);
-        drawSnake(snake, canvas);
-        drawApple(apple, canvas);
-        $score.text(score);
-        keyChanger();
         if (changeKeysSwitch) {
           let keyChangeTimer = setInterval(function () {
             keysCtrl.changeKeyset();
@@ -273,6 +256,28 @@ $(document).ready(function () {
             }, 3000);
           }, 12000);
         }
+
+        const stopGame = function () {
+          if (changeKeysSwitch) {
+            clearInterval(keyChangeTimer);
+          }
+          clearInterval(gameLoop);
+          gameInPlay = false;
+          $startButton.off('click', stopGame);
+        };
+
+        // start event listeners
+
+        $startButton.on('click', stopGame);
+
+        // prepare for game
+
+        sizeCanvas(canvas);
+        clearCanvas(canvas);
+        drawSnake(snake, canvas);
+        drawApple(apple, canvas);
+        $score.text(score);
+        keyChanger();
 
         // run game
 
@@ -303,10 +308,13 @@ $(document).ready(function () {
     }
   })();
 
+  // spin keys
   (function () {
+    let num = 9;
+    for (let i = 0; i < Math.floor(Math.random() * 5); i++) {
+      keysCtrl.changeKeyset();
+    }
     keysCtrl.fillKeys();
-    let num = 5 + Math.floor(Math.random() * 5);
-    console.log(num);
     for (let i = 1; i < num; i++) {
       setTimeout(function () {
         keysCtrl.changeKeyset();
@@ -340,7 +348,9 @@ $(document).ready(function () {
   $navList.appendTo($nav);
   $navListAbout.appendTo($navList);
 
-  $header.appendTo($body);
+  $main.appendTo($body);
+
+  $header.appendTo($main);
   $title.appendTo($header);
   $titleTextMain.appendTo($title);
   $titleTextSecondary.appendTo($title);
@@ -349,7 +359,7 @@ $(document).ready(function () {
   $scoreWrapper.appendTo($header);
   $score.appendTo($scoreWrapper);
 
-  $gameWrapper.appendTo($body);
+  $gameWrapper.appendTo($main);
   $scoreboard.appendTo($gameWrapper);
   $gameCanvas.appendTo($gameWrapper);
   $startButton.appendTo($gameWrapper);

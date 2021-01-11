@@ -102,8 +102,20 @@ body {
 
 /* || Specific Styles */
 
+.nav {
+  position: relative;
+}
+
 .github-icon {
+  position: absolute;
   filter: invert(100%);
+  right: 1rem;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .title {
