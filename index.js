@@ -5,7 +5,7 @@ $(document).ready(function () {
   // create new elements
   const $nav = $('<nav class="nav text-right" id="nav"></nav>');
   const $navList = $('<ul class="list" id="nav-list"></ul>');
-  const $navListAbout = $('<li class="list-item" id="nav-list-about"><a href="http://www.github.com/milofultz" target="_blank"><img src="assets/GitHub-Mark-120px-plus.png" class="icon" id="github-icon"></a></li>');
+  const $navListAbout = $('<li class="list-item" id="nav-list-about"><a href="http://www.github.com/milofultz" target="_blank"><img src="assets/GitHub-Mark-120px-plus.png" class="icon github-icon" id="github-icon"></a></li>');
 
   const $header = $('<header class="header" id="header"></header>');
   const $title = $('<h1 class="title text-center" id="title"></h1>');
@@ -78,10 +78,10 @@ $(document).ready(function () {
         const $keysBody = $('<tbody class="keys-body table-body" id="keys-body"></tbody>');
 
         const directionsLabels = {
-          up: '↑',
-          left: '←',
-          down: '↓',
-          right: '→'
+          up: '⬆️',
+          down: '⬇️',
+          left: '⬅️',
+          right: '➡️'
         };
 
         const $keysHeaderRow = $('<tr class="keys-header-row table-row" id="keys-header-row"></tr>');
@@ -132,7 +132,7 @@ $(document).ready(function () {
     };
 
     const writeText = function (text, color, canvas) {
-      canvas.font = "200px sans-serif";
+      canvas.font = "200px 'Space Mono'";
       canvas.fillStyle = color;
       canvas.textAlign = "center";
       canvas.fillText(text, 1000, 1000);
@@ -141,6 +141,8 @@ $(document).ready(function () {
 
     const clearCanvas = function (canvas) {
       canvas.clearRect(0, 0, canvas.canvas.width, canvas.canvas.height);
+      canvas.fillStyle = "rgb(255, 255, 255)";
+      canvas.fillRect(0, 0, canvas.canvas.width, canvas.canvas.height);
     };
 
     const isEatingSelf = function (snake) {
@@ -173,6 +175,7 @@ $(document).ready(function () {
     let currentSpeed = speedSettings[1].speed;
     let changeKeysSwitch = false;
     let gameInPlay = false;
+    clearCanvas(canvas);
 
     return {
       toggleChangeKeys: function () {
@@ -191,6 +194,8 @@ $(document).ready(function () {
         return gameInPlay;
       },
       play: function () {
+        if (gameInPlay) return;
+        gameInPlay = true;
 
         // define vars
 
@@ -231,7 +236,7 @@ $(document).ready(function () {
         };
 
         const stopGame = function () {
-          clearInterval(keyChanger);
+          clearInterval(keyChangeTimer);
           clearInterval(gameLoop);
           gameInPlay = false;
           $startButton.off('click', stopGame);
@@ -243,37 +248,35 @@ $(document).ready(function () {
 
         // prepare for game
 
-        clearCanvas(canvas);
         sizeCanvas(canvas);
+        clearCanvas(canvas);
         drawSnake(snake, canvas);
         drawApple(apple, canvas);
         $score.text(score);
         keyChanger();
         if (changeKeysSwitch) {
           let keyChangeTimer = setInterval(function () {
-            keyChanger();
             keysCtrl.changeKeyset();
             const keyText = keysCtrl.getKeysetText();
             setTimeout(function () {
               gameText = '3: ' + keyText;
-            }, 9000);
+            }, 0);
             setTimeout(function () {
               gameText = '2: ' + keyText;
-            }, 10000);
+            }, 1000);
             setTimeout(function () {
               gameText = '1: ' + keyText;
-            }, 11000);
+            }, 2000);
             setTimeout(function () {
               gameText = '';
-            }, 11999);
+              keyChanger();
+            }, 3000);
           }, 12000);
         }
 
         // run game
 
         let gameLoop = setInterval(function () {
-          gameInPlay = true;
-
           snakeDirection = nextDirection;
           snake.unshift(coord(snake[0].x + nextDirection.x, snake[0].y + nextDirection.y));
           if (snake[0].x < 0 || snake[0].x >= 2000 || snake[0].y < 0 || snake[0].y >= 2000 ||
@@ -300,10 +303,20 @@ $(document).ready(function () {
     }
   })();
 
-  keysCtrl.fillKeys();
+  (function () {
+    keysCtrl.fillKeys();
+    let num = 5 + Math.floor(Math.random() * 5);
+    console.log(num);
+    for (let i = 1; i < num; i++) {
+      setTimeout(function () {
+        keysCtrl.changeKeyset();
+        keysCtrl.fillKeys();
+      }, i ** 3);
+    }
+  })();
 
   // create event listeners
-  $keys.on('click', function () {
+  $keysLegend.on('click', function () {
     if (!gameCtrl.gameInPlay()) {
       keysCtrl.changeKeyset();
       keysCtrl.fillKeys();
