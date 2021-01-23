@@ -211,12 +211,13 @@ $(document).ready(function () {
         let snakeDirection = directionCoords.up;
         let apple = getNewAppleCoord();
         let nextDirection = directionCoords.up;
+        let changeInterval = 10000;
         let score = 0;
         let gameText = '';
 
         // define helper functions
 
-        const keyChanger = function () {
+        const setControls = function () {
           keysCtrl.fillKeys();
           let keyset = keysCtrl.getKeyset();
           $(document).off('keydown');
@@ -237,25 +238,23 @@ $(document).ready(function () {
           });
         };
 
-        if (changeKeysSwitch) {
-          let keyChangeTimer = setInterval(function () {
-            keysCtrl.changeKeyset();
-            const keyText = keysCtrl.getKeysetText();
-            setTimeout(function () {
-              gameText = '3: ' + keyText;
-            }, 0);
-            setTimeout(function () {
-              gameText = '2: ' + keyText;
-            }, 1000);
-            setTimeout(function () {
-              gameText = '1: ' + keyText;
-            }, 2000);
-            setTimeout(function () {
-              gameText = '';
-              keyChanger();
-            }, 3000);
-          }, 12000);
-        }
+        const changeKeys = function () {
+          keysCtrl.changeKeyset();
+          const keyText = keysCtrl.getKeysetText();
+          setTimeout(function () {
+            gameText = '3: ' + keyText;
+          }, changeInterval - 3000);
+          setTimeout(function () {
+            gameText = '2: ' + keyText;
+          }, changeInterval - 2000);
+          setTimeout(function () {
+            gameText = '1: ' + keyText;
+          }, changeInterval - 1000);
+          setTimeout(function () {
+            gameText = '';
+            if (gameInPlay) setControls();
+          }, changeInterval - 1);
+        };
 
         const stopGame = function () {
           if (changeKeysSwitch) {
@@ -277,9 +276,16 @@ $(document).ready(function () {
         drawSnake(snake, canvas);
         drawApple(apple, canvas);
         $score.text(score);
-        keyChanger();
+        setControls();
 
         // run game
+
+        let keyChangeTimer;
+
+        if (changeKeysSwitch) {
+          changeKeys();
+          keyChangeTimer = setInterval(changeKeys, changeInterval);
+        }
 
         let gameLoop = setInterval(function () {
           snakeDirection = nextDirection;
