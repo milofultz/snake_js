@@ -30,10 +30,10 @@ $(document).ready(function () {
   const keysCtrl = (function () {
     const keysets = [
       {
-        up: { code: 'ArrowUp', label: 'Up' },
-        down: { code: 'ArrowDown', label: 'Down' },
-        left: { code: 'ArrowLeft', label: 'Left' },
-        right: { code: 'ArrowRight', label: 'Right' },
+        up: { code: 'ArrowUp', label: '↑' },
+        down: { code: 'ArrowDown', label: '↓' },
+        left: { code: 'ArrowLeft', label: '←' },
+        right: { code: 'ArrowRight', label: '→' },
       },
       {
         up: { code: 'KeyW', label: 'W' },
@@ -72,7 +72,11 @@ $(document).ready(function () {
         return currentKeyset;
       },
       getKeysetText: function () {
-        return currentKeyset.up.label + currentKeyset.left.label + currentKeyset.down.label + currentKeyset.right.label;
+        return currentKeyset.up.label + ' ' + currentKeyset.left.label + ' ' + currentKeyset.down.label + ' ' + currentKeyset.right.label;
+      },
+      getNextKeysetText: function () {
+        let nextKeyset = keysets[(currentKeysetIndex + 1) % keysets.length];
+        return nextKeyset.up.label + ' ' + nextKeyset.left.label + ' ' + nextKeyset.down.label + ' ' + nextKeyset.right.label;
       },
       fillKeys: function () {
         $keysLegend.html('');
@@ -139,6 +143,8 @@ $(document).ready(function () {
       canvas.fillStyle = color;
       canvas.textAlign = "center";
       canvas.fillText(text, 1000, 1000);
+      canvas.strokeStyle = '#fff';
+      canvas.lineWidth = 2;
       canvas.strokeText(text, 1000, 1000);
     };
 
@@ -198,6 +204,7 @@ $(document).ready(function () {
       },
       play: function () {
         gameInPlay = true;
+        let currentGameInPlay = true;
 
         // define vars
 
@@ -222,46 +229,54 @@ $(document).ready(function () {
           let keyset = keysCtrl.getKeyset();
           $(document).off('keydown');
           $(document).keydown(function (event) {
+            event.preventDefault();
             if (event.originalEvent.code === keyset.up.code && snakeDirection !== directionCoords.down) {
-              event.preventDefault();
               nextDirection = directionCoords.up;
             } else if (event.originalEvent.code === keyset.left.code && snakeDirection !== directionCoords.right) {
-              event.preventDefault();
               nextDirection = directionCoords.left;
             } else if (event.originalEvent.code === keyset.down.code && snakeDirection !== directionCoords.up) {
-              event.preventDefault();
               nextDirection = directionCoords.down;
             } else if (event.originalEvent.code === keyset.right.code && snakeDirection !== directionCoords.left) {
-              event.preventDefault();
               nextDirection = directionCoords.right;
             }
           });
         };
 
         const changeKeys = function () {
-          keysCtrl.changeKeyset();
-          const keyText = keysCtrl.getKeysetText();
+          let keyText;
+
           setTimeout(function () {
-            gameText = '3: ' + keyText;
+            if (currentGameInPlay) {
+              keyText = keysCtrl.getNextKeysetText()
+              gameText = '3: ' + keyText;
+            }
           }, changeInterval - 3000);
           setTimeout(function () {
-            gameText = '2: ' + keyText;
+            if (currentGameInPlay) {
+              gameText = '2: ' + keyText;
+            }
           }, changeInterval - 2000);
           setTimeout(function () {
-            gameText = '1: ' + keyText;
+            if (currentGameInPlay) {
+              gameText = '1: ' + keyText;
+            }
           }, changeInterval - 1000);
           setTimeout(function () {
-            gameText = '';
-            if (gameInPlay) setControls();
+            if (currentGameInPlay) {
+              gameText = '';
+              keysCtrl.changeKeyset();
+              setControls();
+            }
           }, changeInterval - 1);
         };
 
         const stopGame = function () {
-          if (changeKeysSwitch) {
-            clearInterval(keyChangeTimer);
-          }
+          clearInterval(keyChangeTimer);
           clearInterval(gameLoop);
           gameInPlay = false;
+          currentGameInPlay = false;
+          $startButton.text('Start');
+          $(document).off('keydown');
           $startButton.off('click', stopGame);
         };
 
@@ -276,6 +291,7 @@ $(document).ready(function () {
         drawSnake(snake, canvas);
         drawApple(apple, canvas);
         $score.text(score);
+        $startButton.text('Stop');
         setControls();
 
         // run game
@@ -292,7 +308,6 @@ $(document).ready(function () {
           snake.unshift(coord(snake[0].x + nextDirection.x, snake[0].y + nextDirection.y));
           if (snake[0].x < 0 || snake[0].x >= 2000 || snake[0].y < 0 || snake[0].y >= 2000 ||
               isEatingSelf(snake)) {
-            clearCanvas(canvas);
             writeText("You lost!", "rgba(0, 0, 0, 1)", canvas);
             stopGame();``
             return;
@@ -337,7 +352,7 @@ $(document).ready(function () {
     }
   });
   $startButton.on('click', function () {
-    gameCtrl.play();
+    if (!gameCtrl.gameInPlay()) gameCtrl.play();
   });
   $changeKeysButton.on('click', function () {
     gameCtrl.toggleChangeKeys();
