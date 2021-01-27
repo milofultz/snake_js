@@ -89,6 +89,9 @@ body {
   height: 100%;
   width: 100%; }
 
+.game__buttons {
+  margin-bottom: 2.5rem; }
+
 html {
   font-size: 62.5%; }
 

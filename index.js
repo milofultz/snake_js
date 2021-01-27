@@ -22,6 +22,7 @@ $(document).ready(function () {
   const $gameWrapper = $('<div class="game__wrapper text-center" id="game-wrapper"></div>');
   const $scoreboard = $('<span class="score__board" id="scoreboard"></span>');
   const $gameCanvas = $('<canvas class="game__canvas" id="game-canvas"></canvas>');
+  const $gameButtons = $('<div class="game__buttons"></div>');
   const $startButton = $('<span class="button button__start disable-select" id="start-button">Start</span>');
   const $changeKeysButton = $('<span class="button button__change button__change--on disable-select" id="change-keys-button">Change Keys</span>');
   const $speedButton = $('<span class="button button__speed--normal disable-select" id="speed-button">Normal</span>');
@@ -383,7 +384,8 @@ $(document).ready(function () {
   $gameWrapper.appendTo($main);
   $scoreboard.appendTo($gameWrapper);
   $gameCanvas.appendTo($gameWrapper);
-  $startButton.appendTo($gameWrapper);
-  $changeKeysButton.appendTo($gameWrapper);
-  $speedButton.appendTo($gameWrapper);
+  $gameButtons.appendTo($gameWrapper);
+  $startButton.appendTo($gameButtons);
+  $changeKeysButton.appendTo($gameButtons);
+  $speedButton.appendTo($gameButtons);
 });
