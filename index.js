@@ -5,26 +5,26 @@ $(document).ready(function () {
   // create new elements
   const $nav = $('<nav class="nav text-right" id="nav"></nav>');
   const $navList = $('<ul class="list" id="nav-list"></ul>');
-  const $navListAbout = $('<li class="list-item" id="nav-list-about"><a href="http://www.github.com/milofultz" target="_blank"><img src="assets/GitHub-Mark-120px-plus.png" class="icon github-icon" id="github-icon"></a></li>');
+  const $navListAbout = $('<li class="list-item" id="nav-list-about"><a href="http://www.github.com/milofultz" target="_blank"><img src="assets/GitHub-Mark-120px-plus.png" class="icon icon--github" id="github-icon"></a></li>');
 
   const $main = $('<main class="main container" id="main"></main>');
 
   const $title = $('<h1 class="title text-center" id="title"></h1>');
-  const $titleTextMain = $('<span class="title-text title-text-main" id="main-title">SNAKEHACK!</span>');
-  const $titleTextSecondary = $('<span class="title-text title-text-secondary" id="secondary-title">where you have to move like a snake</span>');
+  const $titleTextMain = $('<span class="title__text title__text--main" id="main-title">SNAKEHACK!</span>');
+  const $titleTextSecondary = $('<span class="title__text title__text--secondary" id="secondary-title">where you have to move like a snake</span>');
 
-  const $header = $('<header class="header" id="header"></header>');
-  const $keys = $('<div class="keys text-center disable-select" id="keys"><strong class="main-text rules-header" id="rules-header">Keys:</strong></div>');
-  const $keysLegend = $('<table class="keys-legend table center" id="keys-legend" summary="Which keys do which direction"></table>');
-  const $scoreWrapper = $('<div class="score-wrapper text-center disable-select" id="score-wrapper">Score: </div>');
+  const $header = $('<header class="keys__header" id="keys-header"></header>');
+  const $keys = $('<div class="keys text-center disable-select" id="keys"><strong id="keys-header-text">Keys:</strong></div>');
+  const $keysLegend = $('<table class="keys__legend table center" id="keys-legend" summary="Which keys do which direction"></table>');
+  const $scoreWrapper = $('<div class="score__wrapper text-center disable-select" id="score-wrapper">Score: </div>');
   const $score = $('<span class="score" id="score"></span>');
 
-  const $gameWrapper = $('<div class="game-wrapper text-center" id="game-wrapper"></div>');
-  const $scoreboard = $('<span class="scoreboard" id="scoreboard"></span>');
-  const $gameCanvas = $('<canvas class="game-canvas" id="game-canvas"></canvas>');
-  const $startButton = $('<span class="button button-start disable-select" id="start-button">Start</span>');
-  const $changeKeysButton = $('<span class="button button-change button-on disable-select" id="change-keys-button">Change Keys</span>');
-  const $speedButton = $('<span class="button button-speed speed-normal disable-select" id="speed-button">Normal</span>');
+  const $gameWrapper = $('<div class="game__wrapper text-center" id="game-wrapper"></div>');
+  const $scoreboard = $('<span class="score__board" id="scoreboard"></span>');
+  const $gameCanvas = $('<canvas class="game__canvas" id="game-canvas"></canvas>');
+  const $startButton = $('<span class="button button__start disable-select" id="start-button">Start</span>');
+  const $changeKeysButton = $('<span class="button button__change button__change--on disable-select" id="change-keys-button">Change Keys</span>');
+  const $speedButton = $('<span class="button button__speed--normal disable-select" id="speed-button">Normal</span>');
 
   // create event helper functions
   const keysCtrl = (function () {
@@ -81,8 +81,8 @@ $(document).ready(function () {
       fillKeys: function () {
         $keysLegend.html('');
 
-        const $keysHeader = $('<thead class="keys-header table-head" id="keys-header"></thead>');
-        const $keysBody = $('<tbody class="keys-body table-body" id="keys-body"></tbody>');
+        const $keysHeader = $('<thead class="keys__direction table-head" id="keys-direction"></thead>');
+        const $keysBody = $('<tbody class="keys__body table-body" id="keys-body"></tbody>');
 
         const directionsLabels = {
           up: '⬆️',
@@ -91,12 +91,12 @@ $(document).ready(function () {
           right: '➡️'
         };
 
-        const $keysHeaderRow = $('<tr class="keys-header-row table-row" id="keys-header-row"></tr>');
-        const $keysActualRow = $('<tr class="keys-actual-row table-row" id="keys-actual-row"></tr>');
+        const $keysHeaderRow = $('<tr class="keys__direction-row table-row" id="keys-direction-row"></tr>');
+        const $keysActualRow = $('<tr class="keys__body-row table-row" id="keys-body-row"></tr>');
         for (let dir in directionsLabels) {
-          const $keysColHeading = $('<th class="table-col-heading table-cell" id="keys-heading-' + dir + '">' + directionsLabels[dir] + '</th>');
+          const $keysColHeading = $('<th class="table__col-heading table__cell" id="keys-heading-' + dir + '">' + directionsLabels[dir] + '</th>');
           $keysColHeading.appendTo($keysHeaderRow);
-          const $keysActual = $('<td class="table-data table-cell" id="keys-data-' + dir + '">' + currentKeyset[dir].label + '</th>');
+          const $keysActual = $('<td class="table-data table__cell" id="keys-data-' + dir + '">' + currentKeyset[dir].label + '</th>');
           $keysActual.appendTo($keysActualRow);
         }
         $keysHeaderRow.appendTo($keysHeader);
@@ -196,8 +196,8 @@ $(document).ready(function () {
         lastLabel = speedSettings[(speedSettings.length + currentSpeedIndex - 1) % speedSettings.length].label;
         currentLabel = speedSettings[currentSpeedIndex].label;
         $speedButton.text(currentLabel);
-        $speedButton.removeClass('speed-' + lastLabel.toLowerCase().replace(' ', '-'))
-                    .addClass('speed-' + currentLabel.toLowerCase().replace(' ', '-'));
+        $speedButton.removeClass('button__speed--' + lastLabel.toLowerCase().replace(' ', '-'))
+                    .addClass('button__speed--' + currentLabel.toLowerCase().replace(' ', '-'));
       },
       gameInPlay: function () {
         return gameInPlay;
@@ -356,10 +356,10 @@ $(document).ready(function () {
   });
   $changeKeysButton.on('click', function () {
     gameCtrl.toggleChangeKeys();
-    if (Array.from($changeKeysButton[0].classList).includes('button-on')) {
-      $changeKeysButton.removeClass('button-on');
+    if (Array.from($changeKeysButton[0].classList).includes('button__change--on')) {
+      $changeKeysButton.removeClass('button__change--on');
     } else {
-      $changeKeysButton.addClass('button-on');
+      $changeKeysButton.addClass('button__change--on');
     }
   });
   $speedButton.on('click', gameCtrl.changeSpeed);

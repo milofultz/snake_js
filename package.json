@@ -1,0 +1,25 @@
+{
+  "name": "snake_js",
+  "version": "1.0.0",
+  "description": "I just got started on this, but the goal is to make a snake game with more or less arbitrary rules that change as you play. Part Warioware, part snake, whatever.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "compile:sass": "node-sass ./sass/main.scss style/style.css -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milofultz/snake_js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/milofultz/snake_js/issues"
+  },
+  "homepage": "https://github.com/milofultz/snake_js#readme",
+  "devDependencies": {
+    "node-sass": "^5.0.0"
+  }
+}

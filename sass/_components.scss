@@ -1,0 +1,60 @@
+.button {
+  background-color: $color-white;
+  border: .1rem solid rgba(92, 92, 92, 1);
+  border-radius: 1rem;
+  color: $color-black;
+  cursor: pointer;
+  display: inline-block;
+  box-shadow: 0 0 3px $color-black;
+  font-weight: bold;
+  margin: 1rem;
+  padding: 1rem;
+
+  &__change--on {
+    background-color: rgb(255, 193, 78);
+  }
+
+  &__speed {
+    &--slow {
+      background-color: rgb(78, 78, 255);
+    }
+
+    &--normal {
+      background-color: rgb(96, 255, 96);
+    }
+
+    &--fast {
+      background-color: rgb(255, 255, 95);
+    }
+
+    &--very-fast {
+      background-color: rgb(255, 100, 100);
+    }
+  }
+}
+
+.container {
+  justify-content: center;
+}
+
+.icon {
+  width: 4rem;
+
+  &--github {
+    position: absolute;
+    filter: invert(100%);
+    right: 1rem;
+  }
+}
+
+.table {
+  table-layout: fixed;
+
+  &__cell {
+    width: 5rem;
+  }
+
+  &__col-heading {
+    font-size: 2rem;
+  }
+}

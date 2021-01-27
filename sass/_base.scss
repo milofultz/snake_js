@@ -1,0 +1,18 @@
+html {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: $color-black;
+  max-width: 100rem;
+  margin: auto;
+  padding: 3rem;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
