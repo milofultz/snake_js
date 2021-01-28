@@ -49,20 +49,29 @@ body {
   text-align: right; }
 
 .button {
-  background-color: white;
+  background-color: #eee;
   border: 0.1rem solid #5c5c5c;
   border-radius: 1rem;
   box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5);
   color: black;
   cursor: pointer;
   display: inline-block;
+  filter: brightness(0.9);
   font-weight: bold;
   margin: 1rem;
   padding: 1rem;
+  text-shadow: 0 0 5px #FFF;
   text-transform: uppercase;
-  width: 15ch; }
-  .button__change--on {
-    background-color: #ffc14e; }
+  transition: transform .3s, filter .3s;
+  width: 12ch; }
+  .button:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px); }
+  .button__change {
+    background-color: #ffc14e;
+    opacity: .6; }
+    .button__change--on {
+      opacity: 1; }
   .button__speed--slow {
     background-color: #6c6cff; }
   .button__speed--normal {

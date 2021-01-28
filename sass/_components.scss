@@ -1,19 +1,32 @@
 .button {
-  background-color: $color-white;
+  background-color: #eee;
   border: .1rem solid rgba(92, 92, 92, 1);
   border-radius: 1rem;
   box-shadow: inset -5px -5px 10px rgba($color-black, .5);
   color: $color-black;
   cursor: pointer;
   display: inline-block;
+  filter: brightness(.9);
   font-weight: bold;
   margin: 1rem;
   padding: 1rem;
+  text-shadow: 0 0 5px #FFF;
   text-transform: uppercase;
-  width: 15ch;
+  transition: transform .3s, filter .3s;
+  width: 12ch;
 
-  &__change--on {
+  &:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+  }
+
+  &__change {
     background-color: rgb(255, 193, 78);
+    opacity: .6;
+
+    &--on {
+      opacity: 1;
+    }
   }
 
   &__speed {
