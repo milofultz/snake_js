@@ -14,21 +14,57 @@ body {
   padding: 0;
   box-sizing: inherit; }
 
+html {
+  font-size: 62.5%; }
+
+body {
+  color: white;
+  font-family: "Space Mono", monospace;
+  font-size: 1.6rem; }
+
+.list {
+  list-style: none; }
+
+.center {
+  margin: auto; }
+
+.disable-select {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently supported by Chrome and Opera */ }
+
+.text-center {
+  text-align: center; }
+
+.text-right {
+  text-align: right; }
+
 .button {
   background-color: white;
   border: 0.1rem solid #5c5c5c;
   border-radius: 1rem;
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5);
   color: black;
   cursor: pointer;
   display: inline-block;
-  box-shadow: 0 0 3px black;
   font-weight: bold;
   margin: 1rem;
-  padding: 1rem; }
+  padding: 1rem;
+  text-transform: uppercase;
+  width: 15ch; }
   .button__change--on {
     background-color: #ffc14e; }
   .button__speed--slow {
-    background-color: #4e4eff; }
+    background-color: #6c6cff; }
   .button__speed--normal {
     background-color: #60ff60; }
   .button__speed--fast {
@@ -90,38 +126,5 @@ body {
   width: 100%; }
 
 .game__buttons {
-  margin-bottom: 2.5rem; }
-
-html {
-  font-size: 62.5%; }
-
-body {
-  color: white;
-  font-family: "Space Mono", monospace;
-  font-size: 1.6rem; }
-
-.list {
-  list-style: none; }
-
-.center {
-  margin: auto; }
-
-.disable-select {
-  -webkit-touch-callout: none;
-  /* iOS Safari */
-  -webkit-user-select: none;
-  /* Safari */
-  -khtml-user-select: none;
-  /* Konqueror HTML */
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* Internet Explorer/Edge */
-  user-select: none;
-  /* Non-prefixed version, currently supported by Chrome and Opera */ }
-
-.text-center {
-  text-align: center; }
-
-.text-right {
-  text-align: right; }
+  margin-bottom: 2.5rem;
+  width: 100%; }

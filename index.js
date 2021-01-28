@@ -11,16 +11,12 @@ $(document).ready(function () {
 
   const $title = $('<h1 class="title text-center" id="title"></h1>');
   const $titleTextMain = $('<span class="title__text title__text--main" id="main-title">SNAKEHACK!</span>');
-  const $titleTextSecondary = $('<span class="title__text title__text--secondary" id="secondary-title">where you have to move like a snake</span>');
 
   const $header = $('<header class="keys__header" id="keys-header"></header>');
   const $keys = $('<div class="keys text-center disable-select" id="keys"><strong id="keys-header-text">Keys:</strong></div>');
   const $keysLegend = $('<table class="keys__legend table center" id="keys-legend" summary="Which keys do which direction"></table>');
-  const $scoreWrapper = $('<div class="score__wrapper text-center disable-select" id="score-wrapper">Score: </div>');
-  const $score = $('<span class="score" id="score"></span>');
 
   const $gameWrapper = $('<div class="game__wrapper text-center" id="game-wrapper"></div>');
-  const $scoreboard = $('<span class="score__board" id="scoreboard"></span>');
   const $gameCanvas = $('<canvas class="game__canvas" id="game-canvas"></canvas>');
   const $gameButtons = $('<div class="game__buttons"></div>');
   const $startButton = $('<span class="button button__start disable-select" id="start-button">Start</span>');
@@ -291,7 +287,6 @@ $(document).ready(function () {
         clearCanvas(canvas);
         drawSnake(snake, canvas);
         drawApple(apple, canvas);
-        $score.text(score);
         $startButton.text('Stop');
         setControls();
 
@@ -309,12 +304,15 @@ $(document).ready(function () {
           snake.unshift(coord(snake[0].x + nextDirection.x, snake[0].y + nextDirection.y));
           if (snake[0].x < 0 || snake[0].x >= 2000 || snake[0].y < 0 || snake[0].y >= 2000 ||
               isEatingSelf(snake)) {
-            writeText("You lost!", "rgba(0, 0, 0, 1)", canvas);
-            stopGame();``
+            writeText(`You lost!`, "rgba(0, 0, 0, 1)", canvas);
+            setTimeout(function () {
+              clearCanvas(canvas);
+              writeText(`Score: ${score}`, "rgba(0, 0, 0, 1)", canvas);
+            }, 1300);
+            stopGame();
             return;
           } else if (snake[0].x === apple.x && snake[0].y === apple.y) {
             score += 1;
-            $score.text(score);
             while (isOverlapping(snake, apple)) {
               apple = getNewAppleCoord();
             }
@@ -375,14 +373,10 @@ $(document).ready(function () {
   $header.appendTo($main);
   $title.appendTo($header);
   $titleTextMain.appendTo($title);
-  $titleTextSecondary.appendTo($title);
   $keys.appendTo($header);
   $keysLegend.appendTo($keys);
-  $scoreWrapper.appendTo($header);
-  $score.appendTo($scoreWrapper);
 
   $gameWrapper.appendTo($main);
-  $scoreboard.appendTo($gameWrapper);
   $gameCanvas.appendTo($gameWrapper);
   $gameButtons.appendTo($gameWrapper);
   $startButton.appendTo($gameButtons);

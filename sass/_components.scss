@@ -2,13 +2,15 @@
   background-color: $color-white;
   border: .1rem solid rgba(92, 92, 92, 1);
   border-radius: 1rem;
+  box-shadow: inset -5px -5px 10px rgba($color-black, .5);
   color: $color-black;
   cursor: pointer;
   display: inline-block;
-  box-shadow: 0 0 3px $color-black;
   font-weight: bold;
   margin: 1rem;
   padding: 1rem;
+  text-transform: uppercase;
+  width: 15ch;
 
   &__change--on {
     background-color: rgb(255, 193, 78);
@@ -16,7 +18,7 @@
 
   &__speed {
     &--slow {
-      background-color: rgb(78, 78, 255);
+      background-color: rgb(108, 108, 255);
     }
 
     &--normal {
